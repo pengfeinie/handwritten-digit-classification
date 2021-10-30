@@ -12,7 +12,7 @@ MNIST is a widely used dataset for the hand-written digit classification task. I
 
 ## 3. Handwritten Digit Classification
 
-### 3.1 Fully Connected Neural Network Architecture
+### 3.1 Fully Connected Neural Network for Handwritten Digit Classification Architecture
 
 To define the architecture of this first fully connected neural network, we'll once again use the Keras API and define the model using the [`Sequential`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential) class. Note how we first use a [`Flatten`](https://www.tensorflow.org/api_docs/python/tf/keras/layers/Flatten) layer, which flattens the input so that it can be fed into the model. 
 
@@ -20,7 +20,7 @@ In this next block, you'll define the fully connected layers of this simple work
 
 We'll first build a simple neural network consisting of two fully connected layers and apply this to the digit classification task. Our network will ultimately output a probability distribution over the 10 digit classes (0-9). This first architecture we will be building is depicted below:
 
-![alt_text](https://pengfeinie.github.io/images/mnist_2layers_arch.png)
+![](https://pengfeinie.github.io/images/mnist_2layers_arch.png)
 
 #### 3.1.1 Loading the Dataset
 
@@ -76,3 +76,6 @@ Now that we've trained the model, we can ask it to make predictions about a test
 Use the [`evaluate`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#evaluate) method to evaluate the model on the test dataset!
 
 https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/lab2/Part1_MNIST.ipynb#scrollTo=_J72Yt1o_fY7
+
+### 3.2 Convolutional Neural Network for handwritten digit classification Architecture
+
