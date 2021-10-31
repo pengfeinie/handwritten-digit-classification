@@ -79,7 +79,7 @@ Now that we've trained the model, we can ask it to make predictions about a test
 
 Use the [`evaluate`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#evaluate) method to evaluate the model on the test dataset!
 
-https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/lab2/Part1_MNIST.ipynb#scrollTo=_J72Yt1o_fY7
+
 
 ### 3.2 Convolutional Neural Network for handwritten digit classification Architecture
 
@@ -90,3 +90,7 @@ For those of you new to this concept, CNN is a deep learning technique to classi
 ![](https://pengfeinie.github.io/images/2021-10-31_124519.png)
 
 https://www.analyticsvidhya.com/blog/2021/07/classification-of-handwritten-digits-using-cnn/
+
+https://machinelearningmastery.com/how-to-develop-a-convolutional-neural-network-from-scratch-for-mnist-handwritten-digit-classification/
+
+https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/lab2/Part1_MNIST.ipynb#scrollTo=_J72Yt1o_fY7
