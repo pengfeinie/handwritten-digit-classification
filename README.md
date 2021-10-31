@@ -1,4 +1,4 @@
-In this tutorial, we’ll give you a step by step walk-through of how to build a hand-written digit classifier using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset. For someone new to deep learning, this exercise is arguably the “Hello World” equivalent.
+In this tutorial, we’ll give you a step by step walk-through of how to build a hand-written digit classifier using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset. For someone new to deep learning, this exercise is arguably the “Hello World” equivalent. Although each step will be thoroughly explained in this tutorial, it will certainly benefit someone who already has some theoretical knowledge of the working of CNN. Also, some knowledge of [TensorFlow](https://www.tensorflow.org/) is also good to have, but not necessary.
 
 ## 1. Development Environment
 
@@ -9,6 +9,10 @@ This tutorial assumes that you are using standalone Keras running on top of Tens
 The MNIST handwritten digit classification problem is a standard dataset used in computer vision and deep learning.  Although the dataset is effectively solved, it can be used as the basis for learning and practicing how to develop, evaluate, and use convolutional deep learning neural networks for image classification from scratch. This includes how to develop a robust test harness for estimating the performance of the model, how to explore improvements to the model, and how to save the model and later load it to make predictions on new data.
 
 MNIST is a widely used dataset for the hand-written digit classification task. It consists of 70,000 labeled 28x28 pixel grayscale images of hand-written digits. The dataset is split into 60,000 training images and 10,000 test images. There are 10 classes (one for each of the 10 digits). The task at hand is to train a model using the 60,000 training images and subsequently test its classification accuracy on the 10,000 test images.
+
+The dataset that is being used here is the *[MNIST digits classification dataset](https://keras.io/api/datasets/mnist/)*. Keras is a deep learning API written in Python and MNIST is a dataset provided by this API. This dataset consists of 60,000 training images and 10,000 testing images. It is a decent dataset for individuals who need to have a go at pattern recognition as we will perform in just a minute!
+
+When the Keras API is called, there are four values returned namely- *x_train, y_train, x_test, and y_test*. Do not worry, I will walk you through this.
 
 ## 3. Handwritten Digit Classification
 
@@ -79,5 +83,10 @@ https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/
 
 ### 3.2 Convolutional Neural Network for handwritten digit classification Architecture
 
+For those of you new to this concept, CNN is a deep learning technique to classify the input automatically (well, after you provide the right data). Over the years, CNN has found a good grip over classifying images for computer visions and now it is being used in healthcare domains too. This indicates that CNN is a reliable deep learning algorithm for an automated end-to-end prediction. CNN essentially extracts ‘useful’ features from the given input automatically making it super easy for us!
+
+![end to end process of CNN](https://pengfeinie.github.io/images/42220New.jpg)
+
 ![](https://pengfeinie.github.io/images/2021-10-31_124519.png)
 
+https://www.analyticsvidhya.com/blog/2021/07/classification-of-handwritten-digits-using-cnn/

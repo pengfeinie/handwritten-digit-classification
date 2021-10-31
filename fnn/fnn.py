@@ -1,112 +1,81 @@
-from keras.datasets import mnist
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
-from keras.models import Sequential
-from tensorflow.keras.optimizers import SGD
-from matplotlib import pyplot
-from numpy import mean, std
-from tensorflow.keras.utils import to_categorical
-from sklearn.model_selection import KFold
+from pylab import *
+from numpy import *
+import matplotlib.pyplot as plt
+import matplotlib.cbook as cbook
+import time
+from scipy.misc import imread
+from scipy.misc import imresize
+import matplotlib.image as mpimg
+from scipy.ndimage import filters
+import urllib
+from numpy import random
+
+import cPickle
+
+import os
+from scipy.io import loadmat
+
+# Load the MNIST digit data
+M = loadmat("mnist_all.mat")
+
+# Display the 150-th "5" digit from the training set
+imshow(M["train5"][150].reshape((28, 28)), cmap=cm.gray)
+show()
 
 
-# load train and test dataset
-def load_dataset():
-    # load dataset
-    (trainX, trainY), (testX, testY) = mnist.load_data()
-    # reshape dataset to have a single channel
-    trainX = trainX.reshape((trainX.shape[0], 28, 28, 1))
-    testX = testX.reshape((testX.shape[0], 28, 28, 1))
-    # one hot encode target values
-    trainY = to_categorical(trainY)
-    testY = to_categorical(testY)
-    return trainX, trainY, testX, testY
+def softmax(y):
+    '''Return the output of the softmax function for the matrix of output y. y
+    is an NxM matrix where N is the number of outputs for a single case, and M
+    is the number of cases'''
+    return exp(y) / tile(sum(exp(y), 0), (len(y), 1))
 
 
-# scale pixels
-def prep_pixels(train, test):
-    # convert from integers to floats
-    train_norm = train.astype('float32')
-    test_norm = test.astype('float32')
-    # normalize to range 0-1
-    train_norm = train_norm / 255.0
-    test_norm = test_norm / 255.0
-    # return normalized images
-    return train_norm, test_norm
+def tanh_layer(y, W, b):
+    '''Return the output of a tanh layer for the input matrix y. y
+    is an NxM matrix where N is the number of inputs for a single case, and M
+    is the number of cases'''
+    return tanh(dot(W.T, y) + b)
 
 
-# define cnn model
-def define_model():
-    model = Sequential()
-    model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', input_shape=(28, 28, 1)))
-    model.add(MaxPooling2D((2, 2)))
-    model.add(Flatten())
-    model.add(Dense(100, activation='relu', kernel_initializer='he_uniform'))
-    model.add(Dense(10, activation='softmax'))
-    # compile model
-    opt = SGD(learning_rate=0.01, momentum=0.9)
-    model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
-    return model
+def forward(x, W0, b0, W1, b1):
+    L0 = tanh_layer(x, W0, b0)
+    L1 = tanh_layer(L0, W1, b1)
+    # L1 = dot(W1.T, L0) + b1 if you don't want tanh at the top layer
+    output = softmax(L1)
+    return L0, L1, output
 
 
-# evaluate a model using k-fold cross-validation
-def evaluate_model(dataX, dataY, n_folds=5):
-    scores, histories = list(), list()
-    # prepare cross validation
-    kFold = KFold(n_folds, shuffle=True, random_state=1)
-    # enumerate splits
-    for train_ix, test_ix in kFold.split(dataX):
-        # define model
-        model = define_model()
-        # select rows for train and test
-        trainX, trainY, testX, testY = dataX[train_ix], dataY[train_ix], dataX[test_ix], dataY[test_ix]
-        # fit model
-        history = model.fit(trainX, trainY, epochs=10, batch_size=32, validation_data=(testX, testY), verbose=0)
-        # evaluate model
-        _, acc = model.evaluate(testX, testY, verbose=0)
-        print('> %.3f' % (acc * 100.0))
-        # stores scores
-        scores.append(acc)
-        histories.append(history)
-    return scores, histories
+def cost(y, y_):
+    return -sum(y_ * log(y))
 
 
-# plot diagnostic learning curves
-def summarize_diagnostics(histories):
-    for i in range(len(histories)):
-        # plot loss
-        pyplot.subplot(2, 1, 1)
-        pyplot.title('Cross Entropy Loss')
-        pyplot.plot(histories[i].history['loss'], color='blue', label='train')
-        pyplot.plot(histories[i].history['val_loss'], color='orange', label='test')
-        # plot accuracy
-        pyplot.subplot(2, 1, 2)
-        pyplot.title('Classification Accuracy')
-        pyplot.plot(histories[i].history['accuracy'], color='blue', label='train')
-        pyplot.plot(histories[i].history['val_accuracy'], color='orange', label='test')
-    pyplot.show()
+def deriv_multilayer(W0, b0, W1, b1, x, L0, L1, y, y_):
+    '''Incomplete function for computing the gradient of the cross-entropy
+    cost function w.r.t the parameters of a neural network'''
+    dCdL1 = y - y_
+    # dCdW1 =  dot(L0, dCdL1.T ) if you don't want the nonlinearity at the top layer
+    dCdW1 = dot(L0, ((1 - L1 ** 2) * dCdL1).T)
 
 
-# summarize model performance
-def summarize_performance(scores):
-    # print summary
-    print('Accuracy: mean=%.3f std=%.3f, n=%d' % (mean(scores) * 100, std(scores) * 100, len(scores)))
-    # box and whisker plots of results
-    pyplot.boxplot(scores)
-    pyplot.show()
+# Load sample weights for the multilayer neural network
+snapshot = cPickle.load(open("snapshot50.pkl"))
+W0 = snapshot["W0"]
+b0 = snapshot["b0"].reshape((300, 1))
+W1 = snapshot["W1"]
+b1 = snapshot["b1"].reshape((10, 1))
 
+# Load one example from the training set, and run it through the
+# neural network
+x = M["train5"][148:149].T
+L0, L1, output = forward(x, W0, b0, W1, b1)
+# get the index at which the output is the largest
+y = argmax(output)
 
-# run the test harness for evaluating a model
-def run_test_harness():
-    # load dataset
-    trainX, trainY, testX, testY = load_dataset()
-    # prepare pixel data
-    trainX, testX = prep_pixels(trainX, testX)
-    # evaluate model
-    scores, histories = evaluate_model(trainX, trainY)
-    # learning curves
-    summarize_diagnostics(histories)
-    # summarize estimated performance
-    summarize_performance(scores)
-
-
-# entry point, run the test harness
-run_test_harness()
+################################################################################
+# Code for displaying a feature from the weight matrix mW
+# fig = figure(1)
+# ax = fig.gca()
+# heatmap = ax.imshow(mW[:,50].reshape((28,28)), cmap = cm.coolwarm)
+# fig.colorbar(heatmap, shrink = 0.5, aspect=5)
+# show()
+################################################################################
