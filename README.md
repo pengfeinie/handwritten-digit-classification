@@ -79,3 +79,5 @@ https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/
 
 ### 3.2 Convolutional Neural Network for handwritten digit classification Architecture
 
+![](https://pengfeinie.github.io/images/2021-10-31_124519.png)
+
