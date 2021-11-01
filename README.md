@@ -160,10 +160,17 @@ The *define_model()* function below will define and return this model.
 # define cnn model
 def define_model():
     model = Sequential()
-    model.add(Conv2D(input_shape=(28, 28, 1), strides=(1, 1), padding="same", kernel_size=(3, 3), filters=32,
+    model.add(Conv2D(input_shape=(28, 28, 1), 
+                     strides=(1, 1), 
+                     padding="same", 
+                     kernel_size=(3, 3), 
+                     filters=32,
                      activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Conv2D(strides=(1, 1), padding="same", kernel_size=(3, 3), filters=64,
+    model.add(Conv2D(strides=(1, 1), 
+                     padding="same", 
+                     kernel_size=(3, 3), 
+                     filters=64,
                      activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(Flatten())
@@ -314,10 +321,17 @@ def prep_pixels(train, test):
 # define cnn model
 def define_model():
     model = Sequential()
-    model.add(Conv2D(input_shape=(28, 28, 1), strides=(1, 1), padding="same", kernel_size=(3, 3), filters=32,
+    model.add(Conv2D(input_shape=(28, 28, 1), 
+                     strides=(1, 1), 
+                     padding="same", 
+                     kernel_size=(3, 3), 
+                     filters=32,
                      activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Conv2D(strides=(1, 1), padding="same", kernel_size=(3, 3), filters=64,
+    model.add(Conv2D(strides=(1, 1), 
+                     padding="same", 
+                     kernel_size=(3, 3), 
+                     filters=64,
                      activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(Flatten())
