@@ -1,20 +1,18 @@
 * [1\. Development Environment](#1-development-environment)
 * [2\. MNIST Handwritten Digit Classification Dataset](#2-mnist-handwritten-digit-classification-dataset)
 * [3\. Handwritten Digit Classification](#3-handwritten-digit-classification)
-  * [3\.1 Fully Connected Neural Network for Handwritten Digit Classification Architecture](#31-fully-connected-neural-n
-    etwork-for-handwritten-digit-classification-architecture)
+  * [3\.1 Fully Connected Neural Network for Handwritten Digit Classification Architecture](#31-fully-connected-neural-network-for-handwritten-digit-classification-architecture)
     * [3\.1\.1 Loading the Dataset](#311-loading-the-dataset)
     * [3\.1\.2 Compile the model](#312-compile-the-model)
     * [3\.1\.3 Train the model](#313-train-the-model)
     * [3\.1\.4 Evaluate accuracy on the test dataset](#314-evaluate-accuracy-on-the-test-dataset)
-  * [3\.2 Convolutional Neural Network for handwritten digit classification Architecture](#32-convolutional-neural-netwo
-    rk-for-handwritten-digit-classification-architecture)
-    * [Load Dataset](#load-dataset)
-    * [Prepare Pixel Data](#prepare-pixel-data)
-    * [Define Model](#define-model)
-    * [Evaluate Model](#evaluate-model)
-    * [Present Results](#present-results)
-    * [Complete Example](#complete-example)
+  * [3\.2 Convolutional Neural Network for handwritten digit classification Architecture](#32-convolutional-neural-network-for-handwritten-digit-classification-architecture)
+    * [3\.2\.1 Load Dataset](#321-load-dataset)
+    * [3\.2\.2 Prepare Pixel Data](#322-prepare-pixel-data)
+    * [3\.2\.3 Define Model](#323-define-model)
+    * [3\.2\.4 Evaluate Model](#324-evaluate-model)
+    * [3\.2\.5 Present Results](#325-present-results)
+    * [3\.2\.6 Complete Example](#326-complete-example)
 
 In this tutorial, we’ll give you a step by step walk-through of how to build a hand-written digit classifier using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset. For someone new to deep learning, this exercise is arguably the “Hello World” equivalent. Although each step will be thoroughly explained in this tutorial, it will certainly benefit someone who already has some theoretical knowledge of the working of CNN. Also, some knowledge of [TensorFlow](https://www.tensorflow.org/) is also good to have, but not necessary.
 
@@ -105,9 +103,11 @@ For those of you new to this concept, CNN is a deep learning technique to classi
 
 ![end to end process of CNN](https://pengfeinie.github.io/images/42220New.jpg)
 
+We will define a simple convolutional neural network with 2 convolution layers followed by two fully connected layers. Below is the model architecture we will be using for our CNN. We follow up each convolution layer with RelU activation function and a max-pool layer. RelU introduces non-linearity and max-pooling helps with removing noise.
+
 ![](https://pengfeinie.github.io/images/2021-10-31_124519.png)
 
-#### Load Dataset
+#### 3.2.1 Load Dataset
 
 We know some things about the dataset.
 
@@ -135,7 +135,7 @@ def load_dataset():
     return trainX, trainY, testX, testY
 ```
 
-#### Prepare Pixel Data
+#### 3.2.2 Prepare Pixel Data
 
 We know that the pixel values for each image in the dataset are unsigned integers in the range between black and white, or 0 and 255.
 
@@ -158,7 +158,7 @@ def prep_pixels(train, test):
     return train_norm, test_norm
 ```
 
-#### Define Model
+#### 3.2.3 Define Model
 
 Next, we need to define a baseline convolutional neural network model for the problem.
 
@@ -201,7 +201,7 @@ def define_model():
     return model
 ```
 
-#### Evaluate Model
+#### 3.2.4 Evaluate Model
 
 After the model is defined, we need to evaluate it.
 
@@ -239,7 +239,7 @@ def evaluate_model(dataX, dataY, n_folds=5):
     return scores, histories
 ```
 
-#### Present Results
+#### 3.2.5 Present Results
 
 Once the model has been evaluated, we can present the results.
 
@@ -280,7 +280,7 @@ def summarize_performance(scores):
     pyplot.show()
 ```
 
-#### Complete Example
+#### 3.2.6 Complete Example
 
 We need a function that will drive the test harness.
 
