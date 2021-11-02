@@ -1,3 +1,21 @@
+* [1\. Development Environment](#1-development-environment)
+* [2\. MNIST Handwritten Digit Classification Dataset](#2-mnist-handwritten-digit-classification-dataset)
+* [3\. Handwritten Digit Classification](#3-handwritten-digit-classification)
+  * [3\.1 Fully Connected Neural Network for Handwritten Digit Classification Architecture](#31-fully-connected-neural-n
+    etwork-for-handwritten-digit-classification-architecture)
+    * [3\.1\.1 Loading the Dataset](#311-loading-the-dataset)
+    * [3\.1\.2 Compile the model](#312-compile-the-model)
+    * [3\.1\.3 Train the model](#313-train-the-model)
+    * [3\.1\.4 Evaluate accuracy on the test dataset](#314-evaluate-accuracy-on-the-test-dataset)
+  * [3\.2 Convolutional Neural Network for handwritten digit classification Architecture](#32-convolutional-neural-netwo
+    rk-for-handwritten-digit-classification-architecture)
+    * [Load Dataset](#load-dataset)
+    * [Prepare Pixel Data](#prepare-pixel-data)
+    * [Define Model](#define-model)
+    * [Evaluate Model](#evaluate-model)
+    * [Present Results](#present-results)
+    * [Complete Example](#complete-example)
+
 In this tutorial, we’ll give you a step by step walk-through of how to build a hand-written digit classifier using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset. For someone new to deep learning, this exercise is arguably the “Hello World” equivalent. Although each step will be thoroughly explained in this tutorial, it will certainly benefit someone who already has some theoretical knowledge of the working of CNN. Also, some knowledge of [TensorFlow](https://www.tensorflow.org/) is also good to have, but not necessary.
 
 ## 1. Development Environment
