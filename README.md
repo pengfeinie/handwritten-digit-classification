@@ -324,17 +324,10 @@ def prep_pixels(train, test):
 # define cnn model
 def define_model():
     model = Sequential()
-    model.add(Conv2D(input_shape=(28, 28, 1), 
-                     strides=(1, 1), 
-                     padding="same", 
-                     kernel_size=(3, 3), 
-                     filters=32,
+    model.add(Conv2D(input_shape=(28, 28, 1), strides=(1, 1), padding="same", kernel_size=(3, 3), filters=32,
                      activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Conv2D(strides=(1, 1), 
-                     padding="same", 
-                     kernel_size=(3, 3), 
-                     filters=64,
+    model.add(Conv2D(strides=(1, 1), padding="same", kernel_size=(3, 3), filters=64,
                      activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(Flatten())
@@ -357,13 +350,11 @@ def evaluate_model(dataX, dataY, n_folds=5):
         # define model
         model = define_model()
         # select rows for train and test
-        trainX, trainY, testX, testY = dataX[train_ix], dataY[train_ix], 
-        dataX[test_ix], dataY[test_ix]
+        trainX, trainY, testX, testY = dataX[train_ix], dataY[train_ix], dataX[test_ix], dataY[test_ix]
         # fit model
-        history = model.fit(trainX, trainY, epochs=10, batch_size=32, 
-                            validation_data=(testX, testY), verbose=0)
+        history = model.fit(trainX, trainY, epochs=10, batch_size=32, validation_data=(testX, testY), verbose=0)
         # evaluate model
-        acc = model.evaluate(testX, testY, verbose=0)
+        _, acc = model.evaluate(testX, testY, verbose=0)
         print('> %.3f' % (acc * 100.0))
         # stores scores
         scores.append(acc)
@@ -414,6 +405,20 @@ def run_test_harness():
 run_test_harness()
 
 ```
+
+Running the example prints the classification accuracy for each fold of the cross-validation process. This is helpful to get an idea that the model evaluation is progressing.
+
+![image-20211102092040889](https://pengfeinie.github.io/images/image-20211102092040889.png)
+
+Next, a diagnostic plot is shown, giving insight into the learning behavior of the model across each fold.
+
+In this case, we can see that the model generally achieves a good fit, with train and test learning curves converging. There is no obvious sign of over- or underfitting.
+
+![image-20211102092239587](https://pengfeinie.github.io/images/image-20211102092239587.png)
+
+Finally, a box and whisker plot is created to summarize the distribution of accuracy scores.
+
+![image-20211102092329134](https://pengfeinie.github.io/images/image-20211102092329134.png)
 
 https://www.analyticsvidhya.com/blog/2021/07/classification-of-handwritten-digits-using-cnn/
 
