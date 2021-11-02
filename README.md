@@ -1,14 +1,12 @@
 * [1\. Development Environment](#1-development-environment)
 * [2\. MNIST Handwritten Digit Classification Dataset](#2-mnist-handwritten-digit-classification-dataset)
 * [3\. Handwritten Digit Classification](#3-handwritten-digit-classification)
-  * [3\.1 Fully Connected Neural Network for Handwritten Digit Classification Architecture](#31-fully-connected-neural-n
-    etwork-for-handwritten-digit-classification-architecture)
+  * [3\.1 Fully Connected Neural Network for Machine Learning](#31-fully-connected-neural-network-for-machine-learning)
     * [3\.1\.1 Loading the Dataset](#311-loading-the-dataset)
     * [3\.1\.2 Compile the model](#312-compile-the-model)
     * [3\.1\.3 Train the model](#313-train-the-model)
     * [3\.1\.4 Evaluate accuracy on the test dataset](#314-evaluate-accuracy-on-the-test-dataset)
-  * [3\.2 Convolutional Neural Network for handwritten digit classification Architecture](#32-convolutional-neural-netwo
-    rk-for-handwritten-digit-classification-architecture)
+  * [3\.2 Convolutional Neural Network for Deep Learning](#32-convolutional-neural-network-for-deep-learning)
     * [3\.2\.1 Load Dataset](#321-load-dataset)
     * [3\.2\.2 Prepare Pixel Data](#322-prepare-pixel-data)
     * [3\.2\.3 Define Model](#323-define-model)
@@ -34,7 +32,7 @@ When the Keras API is called, there are four values returned namely- *x_train, y
 
 ## 3. Handwritten Digit Classification
 
-### 3.1 Fully Connected Neural Network for Handwritten Digit Classification Architecture
+### 3.1 Fully Connected Neural Network for Machine Learning 
 
 To define the architecture of this first fully connected neural network, we'll once again use the Keras API and define the model using the [`Sequential`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential) class. Note how we first use a [`Flatten`](https://www.tensorflow.org/api_docs/python/tf/keras/layers/Flatten) layer, which flattens the input so that it can be fed into the model. 
 
@@ -99,7 +97,7 @@ Use the [`evaluate`](https://www.tensorflow.org/api_docs/python/tf/keras/models/
 
 
 
-### 3.2 Convolutional Neural Network for handwritten digit classification Architecture
+### 3.2 Convolutional Neural Network for Deep Learning
 
 For those of you new to this concept, CNN is a deep learning technique to classify the input automatically (well, after you provide the right data). Over the years, CNN has found a good grip over classifying images for computer visions and now it is being used in healthcare domains too. This indicates that CNN is a reliable deep learning algorithm for an automated end-to-end prediction. CNN essentially extracts ‘useful’ features from the given input automatically making it super easy for us!
 
