@@ -37,7 +37,6 @@ def prep_pixels(train, test):
 def define_model():
     model = Sequential()
     model.add(Flatten())
-    model.add(Dense(256, activation='relu'))
     model.add(Dense(128, activation='relu'))
     model.add(Dense(10, activation='softmax'))
     # compile model
