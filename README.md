@@ -1,13 +1,18 @@
 * [1\. Development Environment](#1-development-environment)
 * [2\. MNIST Handwritten Digit Classification Dataset](#2-mnist-handwritten-digit-classification-dataset)
+    * [2\.1 Loading Dataset](#21-loading-dataset)
+    * [2\.2 Prepare Pixel Data](#22-prepare-pixel-data)
 * [3\. Handwritten Digit Classification](#3-handwritten-digit-classification)
   * [3\.1 Fully Connected Neural Network for Machine Learning](#31-fully-connected-neural-network-for-machine-learning)
     * [3\.1\.1 Loading the Dataset](#311-loading-the-dataset)
-    * [3\.1\.2 Compile the model](#312-compile-the-model)
-    * [3\.1\.3 Train the model](#313-train-the-model)
+    * [3\.1\.2 Prepare Pixel Data](#312-prepare-pixel-data)
+    * [3\.1\.3 Define Model](#313-define-model)
+    * [3\.1\.4 Evaluate Model](#314-evaluate-model)
     * [3\.1\.4 Evaluate accuracy on the test dataset](#314-evaluate-accuracy-on-the-test-dataset)
+    * [3\.1\.5 Present Results](#315-present-results)
+    * [3\.1\.6 Complete Example](#316-complete-example)
   * [3\.2 Convolutional Neural Network for Deep Learning](#32-convolutional-neural-network-for-deep-learning)
-    * [3\.2\.1 Load Dataset](#321-load-dataset)
+    * [3\.2\.1 Loading Data](#321-loading-data)
     * [3\.2\.2 Prepare Pixel Data](#322-prepare-pixel-data)
     * [3\.2\.3 Define Model](#323-define-model)
     * [3\.2\.4 Evaluate Model](#324-evaluate-model)
@@ -30,84 +35,7 @@ The dataset that is being used here is the *[MNIST digits classification dataset
 
 When the Keras API is called, there are four values returned namely- *x_train, y_train, x_test, and y_test*. Do not worry, I will walk you through this.
 
-## 3. Handwritten Digit Classification
-
-### 3.1 Fully Connected Neural Network for Machine Learning 
-
-To define the architecture of this first fully connected neural network, we'll once again use the Keras API and define the model using the [`Sequential`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential) class. Note how we first use a [`Flatten`](https://www.tensorflow.org/api_docs/python/tf/keras/layers/Flatten) layer, which flattens the input so that it can be fed into the model. 
-
-In this next block, you'll define the fully connected layers of this simple work.
-
-We'll first build a simple neural network consisting of two fully connected layers and apply this to the digit classification task. Our network will ultimately output a probability distribution over the 10 digit classes (0-9). This first architecture we will be building is depicted below:
-
-![](https://pengfeinie.github.io/images/mnist_2layers_arch.png)
-
-#### 3.1.1 Loading the Dataset
-
-```python
-# load train and test dataset
-def load_dataset():
-    # load dataset
-    (trainX, trainY), (testX, testY) = mnist.load_data()
-    # reshape dataset to have a single channel
-    trainX = trainX.reshape((trainX.shape[0], 28, 28, 1))
-    testX = testX.reshape((testX.shape[0], 28, 28, 1))
-    # one hot encode target values
-    trainY = to_categorical(trainY)
-    testY = to_categorical(testY)
-    return trainX, trainY, testX, testY
-```
-
-```python
-# scale pixels
-def prep_pixels(train, test):
-    # convert from integers to floats
-    train_norm = train.astype('float32')
-    test_norm = test.astype('float32')
-    # normalize to range 0-1
-    train_norm = train_norm / 255.0
-    test_norm = test_norm / 255.0
-    # return normalized images
-    return train_norm, test_norm
-```
-
-#### 3.1.2 Compile the model
-
-Before training the model, we need to define a few more settings. These are added during the model's [`compile`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#compile) step:
-
-* *Loss function* — This defines how we measure how accurate the model is during training. As was covered in lecture, during training we want to minimize this function, which will "steer" the model in the right direction.
-* *Optimizer* — This defines how the model is updated based on the data it sees and its loss function.
-* *Metrics* — Here we can define metrics used to monitor the training and testing steps. In this example, we'll look at the *accuracy*, the fraction of the images that are correctly classified.
-
-We'll start out by using a stochastic gradient descent (SGD) optimizer initialized with a learning rate of 0.1. Since we are performing a categorical classification task, we'll want to use the [cross entropy loss](https://www.tensorflow.org/api_docs/python/tf/keras/metrics/sparse_categorical_crossentropy).
-
-You'll want to experiment with both the choice of optimizer and learning rate and evaluate how these affect the accuracy of the trained model. 
-
-#### 3.1.3 Train the model
-
-We're now ready to train our model, which will involve feeding the training data (`train_images` and `train_labels`) into the model, and then asking it to learn the associations between images and labels. We'll also need to define the batch size and the number of epochs, or iterations over the MNIST dataset, to use during training. 
-
-In Lab 1, we saw how we can use `GradientTape` to optimize losses and train models with stochastic gradient descent. After defining the model settings in the `compile` step, we can also accomplish training by calling the [`fit`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#fit) method on an instance of the `Model` class. We will use this to train our fully connected model
-
-#### 3.1.4 Evaluate accuracy on the test dataset
-
-Now that we've trained the model, we can ask it to make predictions about a test set that it hasn't seen before. In this example, the `test_images` array comprises our test dataset. To evaluate accuracy, we can check to see if the model's predictions match the labels from the `test_labels` array. 
-
-Use the [`evaluate`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#evaluate) method to evaluate the model on the test dataset!
-
-
-
-### 3.2 Convolutional Neural Network for Deep Learning
-
-For those of you new to this concept, CNN is a deep learning technique to classify the input automatically (well, after you provide the right data). Over the years, CNN has found a good grip over classifying images for computer visions and now it is being used in healthcare domains too. This indicates that CNN is a reliable deep learning algorithm for an automated end-to-end prediction. CNN essentially extracts ‘useful’ features from the given input automatically making it super easy for us!
-
-![end to end process of CNN](https://pengfeinie.github.io/images/42220New.jpg)
-
-We will define a simple convolutional neural network with 2 convolution layers followed by two fully connected layers. Below is the model architecture we will be using for our CNN. We follow up each convolution layer with RelU activation function and a max-pool layer. RelU introduces non-linearity and max-pooling helps with removing noise.
-
-![](https://pengfeinie.github.io/images/2021-10-31_124519.png)
-
-#### 3.2.1 Load Dataset
+#### 2.1 Loading Dataset
 
 We know some things about the dataset.
 
@@ -122,7 +50,6 @@ We can, therefore, use a one hot encoding for the class element of each sample, 
 The *load_dataset()* function implements these behaviors and can be used to load the dataset.
 
 ```python
-# load train and test dataset
 def load_dataset():
     # load dataset
     (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -135,7 +62,7 @@ def load_dataset():
     return trainX, trainY, testX, testY
 ```
 
-#### 3.2.2 Prepare Pixel Data
+#### 2.2 Prepare Pixel Data
 
 We know that the pixel values for each image in the dataset are unsigned integers in the range between black and white, or 0 and 255.
 
@@ -157,6 +84,105 @@ def prep_pixels(train, test):
     # return normalized images
     return train_norm, test_norm
 ```
+
+
+
+## 3. Handwritten Digit Classification
+
+### 3.1 Fully Connected Neural Network for Machine Learning 
+
+To define the architecture of this first fully connected neural network, we'll once again use the Keras API and define the model using the [`Sequential`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential) class. Note how we first use a [`Flatten`](https://www.tensorflow.org/api_docs/python/tf/keras/layers/Flatten) layer, which flattens the input so that it can be fed into the model. 
+
+In this next block, you'll define the fully connected layers of this simple work.
+
+We'll first build a simple neural network consisting of two fully connected layers and apply this to the digit classification task. Our network will ultimately output a probability distribution over the 10 digit classes (0-9). This first architecture we will be building is depicted below:
+
+![](https://pengfeinie.github.io/images/mnist_2layers_arch.png)
+
+#### 3.1.1 Loading the Dataset
+
+#### 3.1.2 Prepare Pixel Data
+
+#### 3.1.3 Define Model
+
+Before training the model, we need to define a few more settings. 
+
+* *Loss function* — This defines how we measure how accurate the model is during training. As was covered in lecture, during training we want to minimize this function, which will "steer" the model in the right direction.
+* *Optimizer* — This defines how the model is updated based on the data it sees and its loss function.
+* *Metrics* — Here we can define metrics used to monitor the training and testing steps. In this example, we'll look at the *accuracy*, the fraction of the images that are correctly classified.
+
+We'll start out by using a stochastic gradient descent (SGD) optimizer initialized with a learning rate of 0.1. Since we are performing a categorical classification task, we'll want to use the [cross entropy loss](https://www.tensorflow.org/api_docs/python/tf/keras/metrics/sparse_categorical_crossentropy).
+
+You'll want to experiment with both the choice of optimizer and learning rate and evaluate how these affect the accuracy of the trained model. 
+
+```python
+# define cnn model
+def define_model():
+    model = Sequential()
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+    # compile model
+    opt = SGD(learning_rate=0.1)
+    model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+```
+
+#### 3.1.4 Evaluate Model
+
+We're now ready to train our model, which will involve feeding the training data (`train_images` and `train_labels`) into the model, and then asking it to learn the associations between images and labels. We'll also need to define the batch size and the number of epochs, or iterations over the MNIST dataset, to use during training. 
+
+In Lab 1, we saw how we can use `GradientTape` to optimize losses and train models with stochastic gradient descent. After defining the model settings in the `compile` step, we can also accomplish training by calling the [`fit`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#fit) method on an instance of the `Model` class. We will use this to train our fully connected model.
+
+```python
+# evaluate a model using k-fold cross-validation
+def evaluate_model(dataX, dataY, n_folds=5):
+    scores, histories = list(), list()
+    # prepare cross validation
+    kFold = KFold(n_folds, shuffle=True, random_state=1)
+    # enumerate splits
+    for train_ix, test_ix in kFold.split(dataX):
+        # define model
+        model = define_model()
+        # select rows for train and test
+        trainX, trainY, testX, testY = dataX[train_ix], dataY[train_ix], 
+        dataX[test_ix], dataY[test_ix]
+        # fit model
+        history = model.fit(trainX, trainY, 
+                            epochs=10, batch_size=32, 
+                            validation_data=(testX, testY), verbose=0)
+        # evaluate model
+        acc = model.evaluate(testX, testY, verbose=0)
+        print('> %.3f' % (acc * 100.0))
+        # stores scores
+        scores.append(acc)
+        histories.append(history)
+    return scores, histories
+```
+
+#### 3.1.4 Evaluate accuracy on the test dataset
+
+Now that we've trained the model, we can ask it to make predictions about a test set that it hasn't seen before. In this example, the `test_images` array comprises our test dataset. To evaluate accuracy, we can check to see if the model's predictions match the labels from the `test_labels` array. 
+
+Use the [`evaluate`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#evaluate) method to evaluate the model on the test dataset!
+
+#### 3.1.5 Present Results
+
+#### 3.1.6 Complete Example
+
+### 3.2 Convolutional Neural Network for Deep Learning
+
+For those of you new to this concept, CNN is a deep learning technique to classify the input automatically (well, after you provide the right data). Over the years, CNN has found a good grip over classifying images for computer visions and now it is being used in healthcare domains too. This indicates that CNN is a reliable deep learning algorithm for an automated end-to-end prediction. CNN essentially extracts ‘useful’ features from the given input automatically making it super easy for us!
+
+![end to end process of CNN](https://pengfeinie.github.io/images/42220New.jpg)
+
+We will define a simple convolutional neural network with 2 convolution layers followed by two fully connected layers. Below is the model architecture we will be using for our CNN. We follow up each convolution layer with RelU activation function and a max-pool layer. RelU introduces non-linearity and max-pooling helps with removing noise.
+
+![](https://pengfeinie.github.io/images/2021-10-31_124519.png)
+
+#### 3.2.1 Loading Data
+
+#### 3.2.2 Prepare Pixel Data
 
 #### 3.2.3 Define Model
 
