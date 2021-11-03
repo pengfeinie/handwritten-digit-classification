@@ -1,29 +1,13 @@
-* [1\. Development Environment](#1-development-environment)
-* [2\. MNIST Handwritten Digit Classification Dataset](#2-mnist-handwritten-digit-classification-dataset)
-    * [2\.1 Loading Dataset](#21-loading-dataset)
-    * [2\.2 Prepare Pixel Data](#22-prepare-pixel-data)
-* [3\. Handwritten Digit Classification](#3-handwritten-digit-classification)
-  * [3\.1 Fully Connected Neural Network for Machine Learning](#31-fully-connected-neural-network-for-machine-learning)
-    * [3\.1\.1 Loading the Dataset](#311-loading-the-dataset)
-    * [3\.1\.2 Prepare Pixel Data](#312-prepare-pixel-data)
-    * [3\.1\.3 Define Model](#313-define-model)
-    * [3\.1\.4 Evaluate Model](#314-evaluate-model)
-    * [3\.1\.4 Evaluate accuracy on the test dataset](#314-evaluate-accuracy-on-the-test-dataset)
-    * [3\.1\.5 Present Results](#315-present-results)
-    * [3\.1\.6 Complete Example](#316-complete-example)
-  * [3\.2 Convolutional Neural Network for Deep Learning](#32-convolutional-neural-network-for-deep-learning)
-    * [3\.2\.1 Loading Data](#321-loading-data)
-    * [3\.2\.2 Prepare Pixel Data](#322-prepare-pixel-data)
-    * [3\.2\.3 Define Model](#323-define-model)
-    * [3\.2\.4 Evaluate Model](#324-evaluate-model)
-    * [3\.2\.5 Present Results](#325-present-results)
-    * [3\.2\.6 Complete Example](#326-complete-example)
+[TOC]
 
 In this tutorial, we’ll give you a step by step walk-through of how to build a hand-written digit classifier using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset. For someone new to deep learning, this exercise is arguably the “Hello World” equivalent. Although each step will be thoroughly explained in this tutorial, it will certainly benefit someone who already has some theoretical knowledge of the working of CNN. Also, some knowledge of [TensorFlow](https://www.tensorflow.org/) is also good to have, but not necessary.
 
 ## 1. Development Environment
 
 This tutorial assumes that you are using standalone Keras running on top of TensorFlow with Python 3.
+
+| Python 3.8 | Tensorflow 2.6 |
+| ---------- | -------------- |
 
 ## 2. MNIST Handwritten Digit Classification Dataset
 
@@ -85,8 +69,6 @@ def prep_pixels(train, test):
     return train_norm, test_norm
 ```
 
-
-
 ## 3. Handwritten Digit Classification
 
 ### 3.1 Fully Connected Neural Network for Machine Learning 
@@ -99,9 +81,13 @@ We'll first build a simple neural network consisting of two fully connected laye
 
 ![](https://pengfeinie.github.io/images/mnist_2layers_arch.png)
 
-#### 3.1.1 Loading the Dataset
+#### 3.1.1 Loading Dataset
+
+[loading-dataset](https://github.com/pengfeinie/handwritten-digit-classification#21-loading-dataset)
 
 #### 3.1.2 Prepare Pixel Data
+
+[prepare-pixel-data](https://github.com/pengfeinie/handwritten-digit-classification#22-prepare-pixel-data)
 
 #### 3.1.3 Define Model
 
@@ -134,6 +120,8 @@ We're now ready to train our model, which will involve feeding the training data
 
 In Lab 1, we saw how we can use `GradientTape` to optimize losses and train models with stochastic gradient descent. After defining the model settings in the `compile` step, we can also accomplish training by calling the [`fit`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#fit) method on an instance of the `Model` class. We will use this to train our fully connected model.
 
+Now that we've trained the model, we can ask it to make predictions about a test set that it hasn't seen before. In this example, the `test_images` array comprises our test dataset. To evaluate accuracy, we can check to see if the model's predictions match the labels from the `test_labels` array. Use the [`evaluate`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#evaluate) method to evaluate the model on the test dataset!
+
 ```python
 # evaluate a model using k-fold cross-validation
 def evaluate_model(dataX, dataY, n_folds=5):
@@ -160,15 +148,81 @@ def evaluate_model(dataX, dataY, n_folds=5):
     return scores, histories
 ```
 
-#### 3.1.4 Evaluate accuracy on the test dataset
-
-Now that we've trained the model, we can ask it to make predictions about a test set that it hasn't seen before. In this example, the `test_images` array comprises our test dataset. To evaluate accuracy, we can check to see if the model's predictions match the labels from the `test_labels` array. 
-
-Use the [`evaluate`](https://www.tensorflow.org/api_docs/python/tf/keras/models/Sequential#evaluate) method to evaluate the model on the test dataset!
-
 #### 3.1.5 Present Results
 
+Once the model has been evaluated, we can present the results.
+
+There are two key aspects to present: the diagnostics of the learning behavior of the model during training and the estimation of the model performance. These can be implemented using separate functions.
+
+First, the diagnostics involve creating a line plot showing model performance on the train and test set during each fold of the k-fold cross-validation. These plots are valuable for getting an idea of whether a model is overfitting, underfitting, or has a good fit for the dataset.
+
+We will create a single figure with two subplots, one for loss and one for accuracy. Blue lines will indicate model performance on the training dataset and orange lines will indicate performance on the hold out test dataset. The *summarize_diagnostics()* function below creates and shows this plot given the collected training histories.
+
+```python
+# plot diagnostic learning curves
+def summarize_diagnostics(histories):
+    for i in range(len(histories)):
+        # plot loss
+        pyplot.subplot(2, 1, 1)
+        pyplot.title('Cross Entropy Loss')
+        pyplot.plot(histories[i].history['loss'], color='blue', label='train')
+        pyplot.plot(histories[i].history['val_loss'], color='orange', label='test')
+        # plot accuracy
+        pyplot.subplot(2, 1, 2)
+        pyplot.title('Classification Accuracy')
+        pyplot.plot(histories[i].history['accuracy'], color='blue', label='train')
+        pyplot.plot(histories[i].history['val_accuracy'], color='orange', label='test')
+    pyplot.show()
+```
+
+Next, the classification accuracy scores collected during each fold can be summarized by calculating the mean and standard deviation. This provides an estimate of the average expected performance of the model trained on this dataset, with an estimate of the average variance in the mean. We will also summarize the distribution of scores by creating and showing a box and whisker plot.
+
+The *summarize_performance()* function below implements this for a given list of scores collected during model evaluation.
+
+```python
+# summarize model performance
+def summarize_performance(scores):
+    # print summary
+    print('Accuracy: mean=%.3f std=%.3f, n=%d' % (mean(scores) * 100, std(scores) * 100, len(scores)))
+    # box and whisker plots of results
+    pyplot.boxplot(scores)
+    pyplot.show()
+```
+
 #### 3.1.6 Complete Example
+
+We need a function that will drive the test harness.
+
+This involves calling all of the define functions.
+
+```python
+# run the test harness for evaluating a model
+def run_test_harness():
+    # load dataset
+    trainX, trainY, testX, testY = load_dataset()
+    # prepare pixel data
+    trainX, testX = prep_pixels(trainX, testX)
+    # evaluate model
+    scores, histories = evaluate_model(trainX, trainY)
+    # learning curves
+    summarize_diagnostics(histories)
+    # summarize estimated performance
+    summarize_performance(scores)
+```
+
+We now have everything we need; Running the example prints the classification accuracy for each fold of the cross-validation process. This is helpful to get an idea that the model evaluation is progressing.
+
+![image-20211103172931937](https://pengfeinie.github.io/images/image-20211103172931937.png)
+
+Next, a diagnostic plot is shown, giving insight into the learning behavior of the model across each fold.
+
+In this case, we can see that the model generally achieves a good fit, with train and test learning curves converging. There is no obvious sign of over- or underfitting.
+
+![image-20211103172818144](https://pengfeinie.github.io/images/image-20211103172818144.png)
+
+Finally, a box and whisker plot is created to summarize the distribution of accuracy scores.
+
+![image-20211103172856976](https://pengfeinie.github.io/images/image-20211103172856976.png)
 
 ### 3.2 Convolutional Neural Network for Deep Learning
 
@@ -180,9 +234,13 @@ We will define a simple convolutional neural network with 2 convolution layers f
 
 ![](https://pengfeinie.github.io/images/2021-10-31_124519.png)
 
-#### 3.2.1 Loading Data
+#### 3.2.1 Loading Dataset
+
+[loading-dataset](https://github.com/pengfeinie/handwritten-digit-classification#21-loading-dataset)
 
 #### 3.2.2 Prepare Pixel Data
+
+[prepare-pixel-data](https://github.com/pengfeinie/handwritten-digit-classification#22-prepare-pixel-data)
 
 #### 3.2.3 Define Model
 
