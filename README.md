@@ -1,4 +1,22 @@
-[TOC]
+* [1\. Development Environment](#1-development-environment)
+* [2\. MNIST Handwritten Digit Classification Dataset](#2-mnist-handwritten-digit-classification-dataset)
+    * [2\.1 Loading Dataset](#21-loading-dataset)
+    * [2\.2 Prepare Pixel Data](#22-prepare-pixel-data)
+* [3\. Handwritten Digit Classification](#3-handwritten-digit-classification)
+  * [3\.1 Fully Connected Neural Network for Machine Learning](#31-fully-connected-neural-network-for-machine-learning)
+    * [3\.1\.1 Loading Dataset](#311-loading-dataset)
+    * [3\.1\.2 Prepare Pixel Data](#312-prepare-pixel-data)
+    * [3\.1\.3 Define Model](#313-define-model)
+    * [3\.1\.4 Evaluate Model](#314-evaluate-model)
+    * [3\.1\.5 Present Results](#315-present-results)
+    * [3\.1\.6 Complete Example](#316-complete-example)
+  * [3\.2 Convolutional Neural Network for Deep Learning](#32-convolutional-neural-network-for-deep-learning)
+    * [3\.2\.1 Loading Dataset](#321-loading-dataset)
+    * [3\.2\.2 Prepare Pixel Data](#322-prepare-pixel-data)
+    * [3\.2\.3 Define Model](#323-define-model)
+    * [3\.2\.4 Evaluate Model](#324-evaluate-model)
+    * [3\.2\.5 Present Results](#325-present-results)
+    * [3\.2\.6 Complete Example](#326-complete-example)
 
 In this tutorial, we’ll give you a step by step walk-through of how to build a hand-written digit classifier using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset. For someone new to deep learning, this exercise is arguably the “Hello World” equivalent. Although each step will be thoroughly explained in this tutorial, it will certainly benefit someone who already has some theoretical knowledge of the working of CNN. Also, some knowledge of [TensorFlow](https://www.tensorflow.org/) is also good to have, but not necessary.
 
@@ -399,8 +417,10 @@ Finally, a box and whisker plot is created to summarize the distribution of accu
 
 ![image-20211102092329134](https://pengfeinie.github.io/images/image-20211102092329134.png)
 
-https://www.analyticsvidhya.com/blog/2021/07/classification-of-handwritten-digits-using-cnn/
 
-https://machinelearningmastery.com/how-to-develop-a-convolutional-neural-network-from-scratch-for-mnist-handwritten-digit-classification/
 
-https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/lab2/Part1_MNIST.ipynb#scrollTo=_J72Yt1o_fY7
+[classification-of-handwritten-digits-using-cnn/](https://www.analyticsvidhya.com/blog/2021/07/classification-of-handwritten-digits-using-cnn/)
+
+[mnist-handwritten-digit-classification/](https://machinelearningmastery.com/how-to-develop-a-convolutional-neural-network-from-scratch-for-mnist-handwritten-digit-classification/)
+
+[introtodeeplearning](https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/lab2/Part1_MNIST.ipynb#scrollTo=_J72Yt1o_fY7)
