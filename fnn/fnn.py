@@ -50,22 +50,21 @@ def evaluate_model(dataX, dataY, n_folds=5):
     scores, histories = list(), list()
     # prepare cross validation
     kFold = KFold(n_folds, shuffle=True, random_state=1)
+    # define model
+    model = define_model()
     # enumerate splits
     for train_ix, test_ix in kFold.split(dataX):
-        # define model
-        model = define_model()
         # select rows for train and test
         trainX, trainY, testX, testY = dataX[train_ix], dataY[train_ix], dataX[test_ix], dataY[test_ix]
         # fit model
         history = model.fit(trainX, trainY, epochs=10, batch_size=32, validation_data=(testX, testY), verbose=0)
         # evaluate model
         _, acc = model.evaluate(testX, testY, verbose=0)
-        model.save("fnn_handwritten_digit_classfication.h5")
         print('> %.3f' % (acc * 100.0))
         # stores scores
         scores.append(acc)
         histories.append(history)
-    return scores, histories
+    return scores, histories, model
 
 
 # plot diagnostic learning curves
@@ -100,7 +99,8 @@ def run_test_harness():
     # prepare pixel data
     trainX, testX = prep_pixels(trainX, testX)
     # evaluate model
-    scores, histories = evaluate_model(trainX, trainY)
+    scores, histories, model = evaluate_model(trainX, trainY)
+    model.save("fnn_handwritten_digit_classfication.h5")
     # learning curves
     summarize_diagnostics(histories)
     # summarize estimated performance
