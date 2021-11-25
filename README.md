@@ -424,3 +424,4 @@ Finally, a box and whisker plot is created to summarize the distribution of accu
 [mnist-handwritten-digit-classification/](https://machinelearningmastery.com/how-to-develop-a-convolutional-neural-network-from-scratch-for-mnist-handwritten-digit-classification/)
 
 [introtodeeplearning](https://colab.research.google.com/github/aamini/introtodeeplearning/blob/master/lab2/Part1_MNIST.ipynb#scrollTo=_J72Yt1o_fY7)
+https://matthewearl.github.io/2016/05/06/cnn-anpr/
